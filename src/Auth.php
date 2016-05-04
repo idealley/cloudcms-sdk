@@ -4,7 +4,7 @@ namespace Idealley\CloudCmsSDK;
 
 use League\OAuth2\Client\Provider\GenericProvider;
 
-class Auth {
+abstract class Auth {
 	protected $clientKey;
 	protected $clientSecret;
 	protected $username;
@@ -14,41 +14,40 @@ class Auth {
 
 	
     function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails) {
-		$this->clientKey = $clientKey;
-		$this->clientSecret = $clientSecret;
-		$this->username = $username;
-		$this->password = $password;
-		$this->redirectUri = $redirectUri;
 
 		$this->provider = new GenericProvider([
-	        'clientId'                => $this->clientKey, 
-	        'clientSecret'            => $this->clientSecret, 
+	        'clientId'                => $clientKey, 
+	        'clientSecret'            => $clientSecret, 
 	        'urlAuthorize'            => 'https://api.cloudcms.com/oauth/authorize',
 	        'urlAccessToken'          => 'https://api.cloudcms.com/oauth/token',
-	        'redirectUri'             => $this->redirectUri,    
-	        'urlResourceOwnerDetails' => $this->urlResourceOwnerDetails
+	        'redirectUri'             => $redirectUri,    
+	        'urlResourceOwnerDetails' => $urlResourceOwnerDetails
     	]);
 
         $this->accessToken = $this->provider->getAccessToken(
                 'password', [
-                    'username' => $this->username,
-                    'password' => $this->password
+                    'username' => $username,
+                    'password' => $password
                 ]);
     }
 
-    	function getToken() {
+        private function setAccessToken($username, $password){
+
+        }
+
+    	private function getToken() {
     		return $this->accessToken->getToken();
     	}
 
-    	function getRefreshToken() {
+    	private function getRefreshToken() {
     		return $this->accessToken->getRefreshToken();
     	}
 
-    	function getExpires() {
+    	private function getExpires() {
     		return $this->accessToken->getExpires();
     	}
 
-    	function hasExpired() {
+    	private function hasExpired() {
     		return $this->accessToken->hasExpired();
     	}
 

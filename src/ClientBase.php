@@ -2,22 +2,22 @@
 
 namespace Idealley\CloudCmsSDK;
 
-use Idealley\CloudCmsSDK\Auth;
-
-class ClientBase {
+class ClientBase extends Auth {
 
 	public $test;
 
 	function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails){
-		$this->auth = new Auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails );
+		
+		parent::__construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
+		
 	}
 
  function auth(){
 
-		$test[] = $this->auth->getToken();
-		$test[] = $this->auth->getRefreshToken();
-		$test[] = $this->auth->getExpires();
-		$test[] = $this->auth->hasExpired();
+		$test['Token'] = $this->accessToken->getToken();
+		$test['Refresh Token'] = $this->accessToken->getRefreshToken();
+		$test['Expires'] = $this->accessToken->getExpires();
+		$test['Has expired'] = $this->accessToken->hasExpired();
 
 		dd($test);
 }		
