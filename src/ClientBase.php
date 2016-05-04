@@ -14,6 +14,8 @@ class ClientBase extends Auth{
 		$test[] = $this->hasExpired();
 
 		dd($test);
+
+		
 	}
 
 
