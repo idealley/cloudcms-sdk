@@ -1,10 +1,10 @@
 <?php
 
-namespace Ideally\CloudCmsSDK;
+namespace Idealley\CloudCmsSDK;
 
 use League\OAuth2\Client\Provider\GenericProvider;
 
-abstract class Auth {
+class Auth {
 	protected $clientKey;
 	protected $clientSecret;
 	protected $username;
@@ -12,7 +12,8 @@ abstract class Auth {
     protected $redirectUri;  
     protected $urlResourceOwnerDetails;
 
-	function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails) {
+	
+    function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails) {
 		$this->clientKey = $clientKey;
 		$this->clientSecret = $clientSecret;
 		$this->username = $username;
@@ -20,23 +21,20 @@ abstract class Auth {
 		$this->redirectUri = $redirectUri;
 
 		$this->provider = new GenericProvider([
-	        'clientId'                => $clientKey, 
-	        'clientSecret'            => $clientSecret, 
+	        'clientId'                => $this->clientKey, 
+	        'clientSecret'            => $this->clientSecret, 
 	        'urlAuthorize'            => 'https://api.cloudcms.com/oauth/authorize',
 	        'urlAccessToken'          => 'https://api.cloudcms.com/oauth/token',
 	        'redirectUri'             => $this->redirectUri,    
 	        'urlResourceOwnerDetails' => $this->urlResourceOwnerDetails
     	]);
 
-
-    	function getAccessToken() {
-    		$accessToken = $this->provider->getAccessToken(
-    			'password', [
-    				'username' => $this->username,
-    				'password' => $$this->password
-    			]);
-    		return $this->accessToken;
-    	}
+        $this->accessToken = $this->provider->getAccessToken(
+                'password', [
+                    'username' => $this->username,
+                    'password' => $this->password
+                ]);
+    }
 
     	function getToken() {
     		return $this->accessToken->getToken();
@@ -56,6 +54,6 @@ abstract class Auth {
 
 
 
-	}
+	
 }
 
