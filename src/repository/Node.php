@@ -2,8 +2,7 @@
 
 namespace Idealley\CloudCmsSDK\Repository;
 
-class Node{
-	
+class Node extends Repository{
 	
     /**
      * Acquires the "child nodes" of this node.  This is done by fetching 
@@ -14,8 +13,10 @@ class Node{
      * @param  
      * @return 
      */
-	public function listChildren(){
-
+	public function listChildren($parent){
+          $this->method = 'GET';
+          $this->request = $this->baseUrl.'/repositories/'.$this->repositoryId.'/branches/'.$this->branch.'/nodes/'.$parent.'/children';
+          return $this;
 	}
 
 	/**
@@ -64,24 +65,48 @@ class Node{
 
 	/**
      * Finds around a node.
-     *
-     * @param  
-     * @param  
+     * 
+     * @param  string $payload
      * @return 
+     * @todo make the query flexible...
      */
-	public function find(){
+	public function find($payload){
+
+          $query = '{"slug": "'.$payload.'"}';
+          $this->method = 'POST';
+          $this->request = $this->baseUrl.'/repositories/'.$this->repositoryId.'/branches/'.$this->branch.'/nodes/query';
+          $this->payload = $query;
+          return $this;
 
 	}
 
 	/**
-     * 
+     * This function brings back an image and allows for manipullation. The url is valid but unsusable in code... 
+     * I do not know why yet.
      *
      * @param  
      * @param  
      * @return 
      * @todo maybe we need to move this out
      */
-	public function getFileName(){
+	public function getImage($nodeId){
+          $this->imageUrl = $this->deploymentUrl.'preview/node/'.$nodeId;
+
+          return $this;
 
 	}
+
+     /**
+     * Get the a feature by its name e.g. f:filename
+     *
+     * @param string $nodeId 
+     * @param string $nodeId
+     * @return array
+     */
+     public function getFeature($nodeId, $featureName){
+          $this->method = 'GET';
+          $this->request = $this->baseUrl.'/repositories/'.$this->repositoryId.'/branches/'.$this->branch.'/nodes/'.$nodeId.'/features/'.$featureName;
+
+          return $this;
+     }
 }

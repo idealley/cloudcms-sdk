@@ -2,25 +2,38 @@
 
 namespace Idealley\CloudCmsSDK;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use Idealley\CloudCmsSDK\Repository\Node;
+
 class ClientBase extends Auth {
 
-	public $test;
 
-	function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails){
-		
-		parent::__construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
+	public function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $deploymentUrl, $repositoryId, $branch){
+	
+        $this->auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
+        $this->client = $this->setClient();
+		$this->token = $this->accessToken->getToken();
+		$this->setHeaders();
+		$this->baseUrl = $urlResourceOwnerDetails;
+		$this->deploymentUrl = $deploymentUrl;
+		$this->repositoryId = $repositoryId;
+		$this->branch = $branch;
 		
 	}
 
- function auth(){
+	public function setClient(){
+		return $this->client = new Client();
+	}
 
-		$test['Token'] = $this->accessToken->getToken();
-		$test['Refresh Token'] = $this->accessToken->getRefreshToken();
-		$test['Expires'] = $this->accessToken->getExpires();
-		$test['Has expired'] = $this->accessToken->hasExpired();
+    public function setHeaders(){
+            return $this->headers = array('authorization' => 'Bearer '.$this->token);
+    }
 
-		dd($test);
-}		
+	public function nodes(){
+		return new Node($this->client, $this->headers, $this->baseUrl, $this->deploymentUrl, $this->repositoryId, $this->branch);
+	}
+
 
 		//test refresh token
 		//implement check on token validity then call auth if needed.
