@@ -8,6 +8,7 @@ class Node extends Repository{
      * Acquires the "child nodes" of this node.  This is done by fetching 
      * all of the nodes that are outgoing-associated to this node with
      * an association of type "a:child".
+<<<<<<< HEAD
      * You can add params (examples):
      *     ->addParams(['full' => 'true'])
      *     ->addParams(['sort' => '{"_system.created_on.ms": -1}'])
@@ -242,7 +243,6 @@ class Node extends Repository{
 
      /**
      * Get the a feature by its name e.g. f:filename
-     *
      *
      * @param string $nodeId 
      * @param string $nodeId

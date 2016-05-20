@@ -33,7 +33,6 @@ class ClientBase extends Auth {
 		//}
         
         $this->client = $this->setClient();
-
 		$this->setHeaders();
 		$this->baseUrl = $urlResourceOwnerDetails;
 		$this->deploymentUrl = $deploymentUrl;
