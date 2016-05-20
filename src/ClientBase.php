@@ -53,7 +53,6 @@ class ClientBase extends Auth {
 		return new Node($this->client, $this->headers, $this->baseUrl, $this->deploymentUrl, $this->repositoryId, $this->branch);
 	}
 
-
 		//test refresh token
 		//implement check on token validity then call auth if needed.
 
