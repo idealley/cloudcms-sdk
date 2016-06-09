@@ -8,7 +8,6 @@ class Node extends Repository{
      * Acquires the "child nodes" of this node.  This is done by fetching 
      * all of the nodes that are outgoing-associated to this node with
      * an association of type "a:child".
-<<<<<<< HEAD
      * You can add params (examples):
      *     ->addParams(['full' => 'true'])
      *     ->addParams(['sort' => '{"_system.created_on.ms": -1}'])
@@ -135,28 +134,60 @@ class Node extends Repository{
 
 	/**
      * Traverses around the node and returns any nodes found to be connected.
-     *
+     * Example payload:
+     *    '{
+     *    "associations": {
+     *       "a:child": "MUTUAL",
+     *       "a:knows": "INCOMING",
+     *       "a:related": "OUTGOING"
+     *    },
+     *    "depth": 1,
+     *    "types": [ "custom:type1", "custom:type2" ]
+     *    }'
+     *  
      * @param  
      * @param  
      * @return 
      */
-	public function traverse(){
-
+	public function traverse($node, $payload){
+          $payload = '{"traverse":'.$payload.'}';
+          $this->method = 'POST';
+          $this->request = $this->baseUrl.'/repositories/'.$this->repositoryId.'/branches/'.$this->branch.'/nodes/'.$node.'/traverse'; 
+          $this->payload = $payload;
+          return $this;
 	}
 
      /**
-     * Finds around a node.
+     * Finds nodes.
      *You can use params:
      *     ->addParams(['full' => 'true'])
      *     ->addParams(['sort' => '{"_system.created_on.ms": 1}'])
+     * use mongodb $in statment in query
+     * {"_doc":{"$in":["f913cff03624ac461283","2a41694a7fa7191d3e97"]}}
      *
      * @param  string $payload
      * @return 
      */
-     public function find($query){
+     public function query($query){
           $this->method = 'POST';
           $this->request = $this->baseUrl.'/repositories/'.$this->repositoryId.'/branches/'.$this->branch.'/nodes/query';
           $this->payload = $query;
+          return $this;
+
+     }
+
+     /**
+     * Finds around a node.
+     * You can use params.
+     *
+     * @param  string $node
+     * @param  string $payload
+     * @return 
+     */
+     public function find($node, $payload){
+          $this->method = 'POST';
+          $this->request = $this->baseUrl.'/repositories/'.$this->repositoryId.'/branches/'.$this->branch.'/nodes/'.$node.'/find';
+          $this->payload = $payload;
           return $this;
 
      }

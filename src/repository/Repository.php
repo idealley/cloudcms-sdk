@@ -48,7 +48,7 @@ abstract class Repository{
     $response = $this->client->send($request);
 
     $body = $response->getBody()->getContents();
-    return json_decode($body, true);  
+    return json_decode($body);  
   }
 
   public function set(){
