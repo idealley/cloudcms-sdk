@@ -268,7 +268,7 @@ class Node extends Repository{
      * @todo maybe we need to move this out
      */
 	public function getImage($nodeId){
-          $this->imageUrl = $this->deploymentUrl.'preview/node/'.$nodeId;
+          $this->imageUrl = $this->deploymentUrl.'/preview/node/'.$nodeId;
           return $this;
 	}
 
