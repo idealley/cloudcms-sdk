@@ -261,16 +261,29 @@ class Node extends Repository{
 
      }
 
-	/**
+     /**
+     * Get a file 
+     *
+     * @param string $nodeId
+     * @param string $path
+     * @return string (url)
+     * @todo maybe we need to move this out
+     */
+     public function getFile($nodeId, $path){
+          $this->fileUrl = $this->deploymentUrl.'/static/'.$path.$nodeId;
+          return $this;
+     }
+
+     /**
      * 
      * @param string $nodeId
      * @return string (url)
      * @todo maybe we need to move this out
      */
-	public function getImage($nodeId){
+     public function getImage($nodeId){
           $this->imageUrl = $this->deploymentUrl.'/preview/node/'.$nodeId;
           return $this;
-	}
+     }
 
      /**
      * Get the a feature by its name e.g. f:filename
