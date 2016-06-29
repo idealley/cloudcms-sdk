@@ -3,7 +3,24 @@
 namespace Idealley\CloudCmsSDK\Repository;
 
 class Node extends Repository{
-	
+     
+    /**
+     * Update a document. You need to pass the whole document as you want it to be as a payload 
+     * If some properties are misssing, they will be ereased (not the system one)
+     * You can add params (examples):
+     *     ->addParams(['full' => 'true'])
+     *     ->addParams(['inject' => 'true']) This is used to update the document
+     *
+     * @param  string $parent
+     * @return 
+     */
+     public function updateNode($node, $payload){
+          $this->method = 'PUT';
+          $this->payload = $payload;
+          $this->request = $this->baseUrl.'/repositories/'.$this->repositoryId.'/branches/'.$this->branch.'/nodes/'.$node;
+          return $this;
+     }
+     
     /**
      * Acquires the "child nodes" of this node.  This is done by fetching 
      * all of the nodes that are outgoing-associated to this node with
@@ -15,11 +32,11 @@ class Node extends Repository{
      * @param  string $parent
      * @return 
      */
-	public function listChildren($parent){
+     public function listChildren($parent){
           $this->method = 'GET';
           $this->request = $this->baseUrl.'/repositories/'.$this->repositoryId.'/branches/'.$this->branch.'/nodes/'.$parent.'/children';
           return $this;
-	}
+     }
 
 	/**
      * Acquires the relatives of this node. 
