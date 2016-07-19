@@ -4,6 +4,7 @@ namespace Idealley\CloudCmsSDK;
 
 use League\OAuth2\Client\Provider\GenericProvider;
 
+
 abstract class Auth {
     public $token;
     public $headers;
@@ -15,11 +16,7 @@ abstract class Auth {
     protected $urlResourceOwnerDetails;
 
 
-        private function setAccessToken($username, $password){
-
-        }
-
-        public function auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails){
+    protected function auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails){
             $this->provider = new GenericProvider([
                 'clientId'                => $clientKey, 
                 'clientSecret'            => $clientSecret, 
@@ -35,31 +32,36 @@ abstract class Auth {
                     'password' => $password
                 ]);
 
-            return $this;
-        }
+        return $this;
+    }
 
-    	public function getToken() {
+    protected function setAccessToken($accessToken){
+        $array = [
+            'token'     => $accessToken->getToken(),
+            'expires'   => $accessToken->getExpires()
+            ];
+        return $array;
+    }
+
+    private function getToken() {
     		return $this->accessToken->getToken();
-    	}
+    }
 
-    	public function getRefreshToken() {
+    private function getRefreshToken() {
     		return $this->accessToken->getRefreshToken();
-    	}
+    }
 
-    	public function getExpires() {
+    private function getExpires() {
     		return $this->accessToken->getExpires();
-    	}
+    }
 
-    	public function hasExpired() {
+    private function hasExpired() {
     		return $this->accessToken->hasExpired();
-    	}
-
-        /*public function getExpires(){
+    }
+    /**
+    private function getExpires(){
             return $this->accesToken->getExpires();
-        }*/
-
-
-
-	
+    }
+	*/
 }
 

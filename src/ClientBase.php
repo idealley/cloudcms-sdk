@@ -6,31 +6,16 @@ use App\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Idealley\CloudCmsSDK\Repository\Node;
+use Idealley\CloudCmsSDK\Token\FileTokenStorage as File;
+use League\Flysystem\Adapter\Local;
+use Symfony\Component\Yaml\Yaml;
 
 class ClientBase extends Auth {
 
 
-	public function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $deploymentUrl, $repositoryId, $branch){
-		
-		//Get Token from Local Storage
-		//$token = Token::find(1);
+	public function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $deploymentUrl, $repositoryId, $branch, $tokenStoragePath){
 
-
-		//if($this->tokenHasExpired){
-        	$this->auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
-
-        	$this->token = $this->accessToken->getToken();
-			$this->refreshToken = $this->accessToken->getRefreshToken();
-			$this->refreshToken = $this->accessToken->getExpires();
-			$this->tokenHasExpired = $this->accessToken->hasExpired();
-
-			/*Token::find(1)->update([
-            	'token' => $this->token,
-            	'refresh_token' => $this->refreshToken,
-            	'expires_in' => $this->expires_in,
-            	'has_expired' => $this->tokenHasExpired
-        	]);*/
-		//}
+       	$this->token = $this->setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $tokenStoragePath);
         
         $this->client = $this->setClient();
 		$this->setHeaders();
@@ -53,11 +38,27 @@ class ClientBase extends Auth {
 		return new Node($this->client, $this->headers, $this->baseUrl, $this->deploymentUrl, $this->repositoryId, $this->branch);
 	}
 
-		//test refresh token
-		//implement check on token validity then call auth if needed.
+	public function setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $tokenStoragePath){
+		    $now = new \DateTime('now', new \DateTimeZone('UTC'));
+		    $file = new File('token', $tokenStoragePath);
+		  
+		    if($file->read('token') === null){  	
+		    	$this->auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
+		    	$file->write($this->setAccessToken($this->accessToken));
+		    	return $this->accessToken->getToken(); 	
+		    }
+		    if($now->getTimestamp() >= $file->read('expires')){
+		    	//Use the refresh token...
+		    	$this->auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
+		    	$file->write($this->setAccessToken($this->accessToken));
+		    	return  $this->accessToken->getToken();
+		    }
 
+		    if($now->getTimestamp() < $file->read('expires')){
+		    	return $file->read('token');
+		    }
 
-
+	}
 
 }
 

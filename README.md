@@ -1,18 +1,18 @@
 # Cloud CMS SDK for PHP
+[Cloud CMS](https://www.cloudcms.com/) is a "headless" CMS.
 
-###This is (will be) a framework agnostic PHP SDK. 
+### This is a framework agnostic PHP SDK. 
+[Here is the Laravel5  wrapper](https://github.com/idealley/cloudcms-laravel)
+
+### What can it do
+
+For now the SDK allows to read content from CloudCms as well as to write/update a node. We will be adding more features, but for now the SDK allows to create a full fonctional website using Cloud CMS as content management.
 
 ## How to install
 
 `composer require idealley/cloudcms-sdk`
 
-## Todo
-
-Everything...
-
 # Every thing is still very experimental and subject to CHANGE
-
-CC is a Laravel Facade, if you do not use Laravel you can just new up the class.
 
 You can get a children of a node like this (think category or list of blogs)
 
@@ -51,4 +51,9 @@ You can get an image like this
                     ->addParams(['size' => '400'])
                     ->set();
 
-We need to get the path programatically. You can chain any params as per [the documentation](https://www.cloudcms.com/documentation/application-server/services/node-urls.html) 
+You can chain any params as per [the documentation](https://www.cloudcms.com/documentation/application-server/services/node-urls.html) 
+
+### Todo
+
+* Use a proxy url to fetch the images/documents
+* add more methods
