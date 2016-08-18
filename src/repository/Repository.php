@@ -3,6 +3,7 @@
 namespace Idealley\CloudCmsSDK\Repository;
 
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Exception\ClientException;
 
 abstract class Repository{
 
@@ -42,13 +43,19 @@ abstract class Repository{
     if($this->method == 'GET') {
       $this->payload = null;
     }
-    
+
     $request = new Request($this->method, $this->request.$this->params, $this->headers, $this->payload);
 
-    $response = $this->client->send($request);
-
-    $body = $response->getBody()->getContents();
-    return json_decode($body);  
+    //try {
+      $response = $this->client->send($request);
+      $body = $response->getBody()->getContents();
+      return json_decode($body); 
+    /*} catch (ClientException $e) {
+        $error = $e->getResponse();
+        $type = json_decode($error->getBody()->getContents())->error;
+    }*/
+    
+     
   }
 
   public function set(){

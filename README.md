@@ -53,7 +53,14 @@ You can get an image like this
 
 You can chain any params as per [the documentation](https://www.cloudcms.com/documentation/application-server/services/node-urls.html) 
 
+Refer to `repository/Node.php` to see all available methods. They are documented with working examples 
+
 ### Todo
 
 * Use a proxy url to fetch the images/documents
 * add more methods
+
+### Get documents and images stored in Cloud CMS
+
+* Get images you with the node.js server developped by Cloud CMS to fetch and cache the images you need.
+* Deploy an application and use the deployement url

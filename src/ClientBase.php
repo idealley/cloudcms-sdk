@@ -17,7 +17,7 @@ class ClientBase extends Auth {
 
        	$this->token = $this->setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $tokenStoragePath);
         
-        $this->client = $this->setClient();
+        $this->setClient();
 		$this->setHeaders();
 		$this->baseUrl = $urlResourceOwnerDetails;
 		$this->deploymentUrl = $deploymentUrl;
@@ -25,13 +25,15 @@ class ClientBase extends Auth {
 		$this->branch = $branch;
 		
 	}
-
+	/**
+	* Set the Guzzle Client
+	*/
 	public function setClient(){
-		return $this->client = new Client();
+		$this->client = new Client();
 	}
 
     public function setHeaders(){
-            return $this->headers = array('authorization' => 'Bearer '.$this->token);
+            $this->headers = array('authorization' => 'Bearer '.$this->token);
     }
 
 	public function nodes(){
