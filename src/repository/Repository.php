@@ -46,14 +46,15 @@ abstract class Repository{
 
     $request = new Request($this->method, $this->request.$this->params, $this->headers, $this->payload);
 
-    //try {
+    try {
       $response = $this->client->send($request);
       $body = $response->getBody()->getContents();
       return json_decode($body); 
-    /*} catch (ClientException $e) {
+    } catch (ClientException $e) {
         $error = $e->getResponse();
         $type = json_decode($error->getBody()->getContents())->error;
-    }*/
+        return $type;
+    }
     
      
   }
