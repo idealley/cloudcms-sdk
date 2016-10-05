@@ -14,4 +14,9 @@ interface TokenStorageInterface
      * @return mixed
      */
     public function write(array $content);
+
+    /**  
+     * @return mixed
+     */
+    public function delete();
 }

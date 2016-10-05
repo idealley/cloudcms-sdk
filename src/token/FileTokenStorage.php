@@ -31,8 +31,8 @@ class FileTokenStorage implements TokenStorageInterface
             $file = 'token';
         }
 
-        $adapter = new Local($path);
-        $this->filesystem = new File($adapter);
+        $this->adapter = new Local($path);
+        $this->filesystem = new File($this->adapter);
         $this->file = $file;
 
     }
@@ -56,5 +56,13 @@ class FileTokenStorage implements TokenStorageInterface
     public function write(array $content)
     {
         $this->filesystem->put($this->file, Yaml::dump($content));
+    }
+
+    /**
+     * @param array $content
+     */
+    public function delete()
+    {
+        $this->filesystem->delete($this->file);
     }
 }

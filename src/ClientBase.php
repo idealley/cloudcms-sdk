@@ -15,8 +15,8 @@ class ClientBase extends Auth {
 
 
 	public function __construct($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $deploymentUrl, $repositoryId, $branch, $tokenStoragePath){
-
-       	$this->token = $this->setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $tokenStoragePath);
+		$this->tokenStoragePath = $tokenStoragePath;
+       	$this->token = $this->setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
         
         $this->setClient();
 		$this->setHeaders();
@@ -45,9 +45,9 @@ class ClientBase extends Auth {
 		return new Branch($this->client, $this->headers, $this->baseUrl, $this->deploymentUrl, $this->repositoryId, $this->branch);
 	}
 
-	public function setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $tokenStoragePath){
+	public function setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails){
 		    $now = new \DateTime('now', new \DateTimeZone('UTC'));
-		    $file = new File('token', $tokenStoragePath);
+		    $file = new File('token', $this->tokenStoragePath);
 		  
 		    if($file->read('token') === null){  	
 		    	$this->auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
@@ -65,6 +65,16 @@ class ClientBase extends Auth {
 		    	return $file->read('token');
 		    }
 
+	}
+
+	/**
+	* Delete the token.
+	*@return null
+	*/
+	public function unsetToken()
+	{
+		$file = New File('token', $this->tokenStoragePath);
+		$file->delete();
 	}
 
 }
