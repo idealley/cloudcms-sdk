@@ -176,7 +176,7 @@ class Node extends Repository{
 
      /**
      * Finds nodes.
-     *You can use params:
+     * You can use params:
      *     ->addParams(['full' => 'true'])
      *     ->addParams(['sort' => '{"_system.created_on.ms": 1}'])
      * use mongodb $in statment in query

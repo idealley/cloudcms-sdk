@@ -6,6 +6,7 @@ use App\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Idealley\CloudCmsSDK\Repository\Node;
+use Idealley\CloudCmsSDK\Repository\Branch;
 use Idealley\CloudCmsSDK\Token\FileTokenStorage as File;
 use League\Flysystem\Adapter\Local;
 use Symfony\Component\Yaml\Yaml;
@@ -40,6 +41,10 @@ class ClientBase extends Auth {
 		return new Node($this->client, $this->headers, $this->baseUrl, $this->deploymentUrl, $this->repositoryId, $this->branch);
 	}
 
+	public function branches(){
+		return new Branch($this->client, $this->headers, $this->baseUrl, $this->deploymentUrl, $this->repositoryId, $this->branch);
+	}
+
 	public function setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails, $tokenStoragePath){
 		    $now = new \DateTime('now', new \DateTimeZone('UTC'));
 		    $file = new File('token', $tokenStoragePath);
@@ -63,6 +68,5 @@ class ClientBase extends Auth {
 	}
 
 }
-
 
 
