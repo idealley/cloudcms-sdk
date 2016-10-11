@@ -12,7 +12,7 @@ For now the SDK allows to read content from CloudCms as well as to write/update 
 
 `composer require idealley/cloudcms-sdk`
 
-# Every thing is still very experimental and subject to CHANGE
+# Main available methods
 
 You can get a children of a node like this (think category or list of blogs)
 
@@ -53,7 +53,35 @@ You can get an image like this
 
 You can chain any params as per [the documentation](https://www.cloudcms.com/documentation/application-server/services/node-urls.html) 
 
-Refer to `repository/Node.php` to see all available methods. They are documented with working examples 
+__Refer to `repository/Node.php` to see all available methods. They are documented with working examples__
+
+### Model (Schema)
+
+In order to simplyfy the display of the content you can save the model (schema) from Cloud CMS locally. Then when you have a sucessfull request you can compare it to the model. All properties are available and you do not need to check if they are set. 
+
+This method will get the model and save it locally
+
+        CC::setModel('your:content-type');
+
+This method will delet the model (when you update it in Cloud CMS)
+        
+        CC::setModel('your:content-type');
+
+Here is an example of parsing
+
+            foreach ($items as $key => $i){
+                // You can do it as the commented lign if you do use Cloud CMS array elements (repeatable elements in the interface)
+                //$item += $this->model;
+                //If not do it like this
+                $item = array_replace_recursive($this->model, $i);
+                [...]
+                // you can then work on your fields for example to parse markdown
+                // the $item has ben objectified before hand
+                $item->body = Markdown::parse($item->body);
+                //but you could do it like this if your prefer to work on an array
+                $item['body'] = Markdown::parse($item['body']);
+
+
 
 ### Todo
 
