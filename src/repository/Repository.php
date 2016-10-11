@@ -38,7 +38,7 @@ abstract class Repository{
 
   }
 
-  public function get(){
+  public function get($array = true){
 
     if($this->method == 'GET') {
       $this->payload = null;
@@ -49,7 +49,7 @@ abstract class Repository{
     try {
       $response = $this->client->send($request);
       $body = $response->getBody()->getContents();
-      return json_decode($body); 
+      return json_decode($body, $array); 
     } catch (ClientException $e) {
         $error = $e->getResponse();
         $type = json_decode($error->getBody()->getContents())->error;

@@ -7,7 +7,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Idealley\CloudCmsSDK\Repository\Node;
 use Idealley\CloudCmsSDK\Repository\Branch;
-use Idealley\CloudCmsSDK\Token\FileTokenStorage as File;
+use Idealley\CloudCmsSDK\Token\FileTokenStorage as TokenFile;
+use Idealley\CloudCmsSDK\Model\FileModelStorage as ModelFile;
 use League\Flysystem\Adapter\Local;
 use Symfony\Component\Yaml\Yaml;
 
@@ -47,7 +48,7 @@ class ClientBase extends Auth {
 
 	public function setToken($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails){
 		    $now = new \DateTime('now', new \DateTimeZone('UTC'));
-		    $file = new File('token', $this->tokenStoragePath);
+		    $file = new TokenFile('token', $this->tokenStoragePath);
 		  
 		    if($file->read('token') === null){  	
 		    	$this->auth($clientKey, $clientSecret, $username, $password, $redirectUri, $urlResourceOwnerDetails);
@@ -73,7 +74,33 @@ class ClientBase extends Auth {
 	*/
 	public function unsetToken()
 	{
-		$file = New File('token', $this->tokenStoragePath);
+		$file = New TokenFile('token', $this->tokenStoragePath);
+		$file->delete();
+	}
+
+	/**
+	* Save the model locally for faster use
+	*/
+	public function setModel($qname){
+		$file = new ModelFile('model');
+
+		if($file->read('model') === null){  
+			$branch = $this->branches();
+			$schema['model'] = $branch->getSchema($qname)->get()['properties'];
+			$file->write($schema);
+			return $file->read();
+		}
+
+		if($file->read('model')){  	
+		    return $file->read();
+		}
+	}
+
+	/**
+	* If the model changed in CloudCMS allow for deletion
+	*/
+	public function unsetModel(){
+		$file = New ModelFile('model');
 		$file->delete();
 	}
 

@@ -2,11 +2,12 @@
 
 namespace Idealley\CloudCmsSDK\Token;
 
+use Symfony\Component\Yaml\Yaml;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem as File;
-use Symfony\Component\Yaml\Yaml;
+use Idealley\CloudCmsSDK\Storage\StorageInterface;
 
-class FileTokenStorage implements TokenStorageInterface
+class FileTokenStorage implements StorageInterface
 {
     /**
      * @var null|string
@@ -25,7 +26,7 @@ class FileTokenStorage implements TokenStorageInterface
     /**
      * @param string $path
      */
-    public function __construct($file = null, $path = '../storage/token')
+    public function __construct($file = null, $path = '../storage/cloudcms/token')
     {
         if ($file === null) {
             $file = 'token';
@@ -47,7 +48,7 @@ class FileTokenStorage implements TokenStorageInterface
         }
         $content = Yaml::parse($this->filesystem->read($this->file));
 
-        return isset($content[$key]) ? $content[$key] : null;
+        return $content[$key] ?? null;
     }
 
     /**

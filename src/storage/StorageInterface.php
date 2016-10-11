@@ -1,8 +1,8 @@
 <?php
 
-namespace Idealley\CloudCmsSDK\Token;
+namespace Idealley\CloudCmsSDK\Storage;
 
-interface TokenStorageInterface
+interface StorageInterface
 {
     /**
      * @return mixed
